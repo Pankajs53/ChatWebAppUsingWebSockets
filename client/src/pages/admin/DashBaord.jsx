@@ -53,9 +53,9 @@ const DashBaord = () => {
       alignItems={"center"}
       margin={"2rem 0"}
     >
-      <Widget title={"Users"} value={34} Icon={<PersonIcon/>} />
-      <Widget title={"Chats"} value={3} Icon={<GroupIcon/>}/>
-      <Widget title={"Messages"} value={344} Icon={<MessageIcon/>} />
+      <Widget title={"Users"} value={34} Icon={<PersonIcon />} />
+      <Widget title={"Chats"} value={3} Icon={<GroupIcon />} />
+      <Widget title={"Messages"} value={344} Icon={<MessageIcon />} />
     </Stack>
   );
 
@@ -64,7 +64,19 @@ const DashBaord = () => {
       <Container component={"main"}>
         {Appbar}
 
-        <Stack direction={"row"} spacing={"2rem"} flexWrap={"wrap"}>
+        <Stack
+          direction={{
+            xs:"column",
+            lg:"row"
+          }}
+          sx={{gap:"2rem"}}
+          flexWrap={"wrap"}
+          justifyContent={"center"}
+          alignItems={{
+            xs:"center",
+            lg:"strech"
+          }}
+        >
           <Paper
             sx={{
               padding: "2rem 3.5rem",
@@ -75,7 +87,7 @@ const DashBaord = () => {
           >
             <Typography>Last Messages</Typography>
             {/* Chat */}
-            <LineChart/>
+            <LineChart value={[23, 12, 0, 12, 5, 8]} />
           </Paper>
 
           <Paper
@@ -94,7 +106,10 @@ const DashBaord = () => {
             }}
           >
             {/* {Chart} */}
-            <DoughnutChart/>
+            <DoughnutChart
+              value={[45, 30]}
+              labels={["Single Chat", "Group Chat"]}
+            />
             <Stack
               position={"absolute"}
               direction={"row"}
@@ -117,34 +132,36 @@ const DashBaord = () => {
   );
 };
 
-const Widget = ({ title, value, Icon }) => 
-    <Paper 
+const Widget = ({ title, value, Icon }) => (
+  <Paper
+    sx={{
+      padding: "2rem",
+      margin: "2rem 0",
+      borderRadius: "1rem",
+      width: "20rem",
+    }}
+  >
+    <Stack alignItems={"center"} spacing={"1rem"}>
+      <Typography
         sx={{
-            padding:"2rem",
-            margin:"2rem 0",
-            borderRadius:"1rem",
-            width:"20rem",
+          color: "rgba(0,0,0,0.7)",
+          borderRadius: "50%",
+          border: `5px solid rgba(0,0,0,0.9)`,
+          width: "5rem",
+          height: "5rem",
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
         }}
-    >
-        <Stack alignItems={"center"} spacing={"1rem"}>
-            <Typography
-                sx={{
-                    color:"rgba(0,0,0,0.7)",
-                    borderRadius:"50%",
-                    border:`5px solid rgba(0,0,0,0.9)`,
-                    width:"5rem",
-                    height:"5rem",
-                    display:"flex",
-                    justifyContent:"center",
-                    alignItems:"center"
-                }}
-            
-            >{value}</Typography>
-            <Stack>
-                {Icon}
-                <Typography>{title}</Typography>
-            </Stack>
-        </Stack>
-    </Paper>;
+      >
+        {value}
+      </Typography>
+      <Stack>
+        {Icon}
+        <Typography>{title}</Typography>
+      </Stack>
+    </Stack>
+  </Paper>
+);
 
 export default DashBaord;

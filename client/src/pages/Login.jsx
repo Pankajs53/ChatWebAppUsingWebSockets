@@ -1,10 +1,14 @@
+import { useFileHandler, useInputValidation } from "6pp";
+import { CameraAlt as CameraAltIcon } from "@mui/icons-material";
+import { Avatar, Button, Container, IconButton, Paper, Stack, TextField, Typography } from "@mui/material";
+import axios from "axios";
 import React, { useState } from "react";
-import { Container, Paper, Typography, TextField, Button , Stack, Avatar } from "@mui/material";
-import { IconButton } from '@mui/material';
-import {CameraAlt as CameraAltIcon} from "@mui/icons-material"
-import {VisuallyHiddenInput} from "../components/styles/StyledCompinents"
+import toast from "react-hot-toast";
+import { useDispatch } from "react-redux";
+import { VisuallyHiddenInput } from "../components/styles/StyledCompinents";
+import { server } from "../constants/config";
+import {userExists} from "../redux/reducers/auth"
 import { usernameValidator } from "../utils/validator";
-import {useInputValidation,useFileHandler} from "6pp"
 
 const Login = () => {
   const [isLogin, setIsLogin] = useState(true);
@@ -18,13 +22,64 @@ const Login = () => {
 
   const avatar = useFileHandler("single");
   
-  const handleSignUp = (e) =>{
+  const dispatch = useDispatch();
+  const handleSignUp = async(e) =>{
     e.preventDefault();
-  }
 
-  const handleLogin = (e) =>{
+    const formData = new FormData();
+    formData.append("avatar",avatar.file);
+    formData.append("name",name.value);
+    formData.append("bio",bio.value);
+    formData.append("username",username.value);
+    formData.append("password",password.value);
+
+    const config = {
+      withCredentials:true,
+      headers:{
+        "Content-Type":"multipart/form-data",
+      }
+    };
+
+    try{
+      console.log("Data sent from frotend in signup is->",formData);
+      const {data} = await axios.post(`${server}/api/v1/user/new`,
+      formData,config);
+
+      dispatch(userExists(true))
+      toast.success(data.message);
+
+    }catch(error){
+      console.log("Error in signup api frotend",error)
+      toast.error(error?.response?.data?.message || "Something went wrong");
+
+    }
+  
+  };
+
+  const handleLogin = async(e) =>{
     e.preventDefault();
-  }
+
+    const config = {
+      withCredentials:true,
+      headers:{
+        "Content-Type":"application/json"
+      }
+    }
+
+    try{
+      const {data} = await axios.post(`${server}/api/v1/user/login`,{
+        username:username.value,
+        password:password.value
+      }, config
+      );
+
+      dispatch(userExists(true));
+      toast.success(data.message)
+    }catch(error){
+      console.log("Error in login api frotend",error)
+      toast.error(error?.response?.data?.message || "Something went wrong");
+    }
+  };
 
   
 
