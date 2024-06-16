@@ -1,0 +1,6 @@
+# Models for : Chat, Users, Message,Request(status,pending),
+# API: user realted:login,signup,searchapi,register,searchuser,sendrequest,acceptrequest,(notficationsend using websocket), notification API
+friend related:get frriend
+chat api:send attachment,creategroup,getMyChat,geetAllGroupCreatedByME,rename group,delet chat,add members, remove mebers, leave group,get messaged(old)(pagination)
+
+learned how to handle different error(big unknown statement into small)
